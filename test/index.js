@@ -2,9 +2,9 @@
 
 const test = require('tape')
 const Blockchain = require('..')
-const Block = require('ethereumjs-block')
+const Block = require('vaporyjs-block')
 const async = require('async')
-const ethUtil = require('ethereumjs-util')
+const vapUtil = require('vaporyjs-util')
 
 test('blockchain test', function (t) {
   t.plan(30)
@@ -34,7 +34,7 @@ test('blockchain test', function (t) {
     function addBlocks (done) {
       function addNextBlock (blockNumber) {
         var block = new Block()
-        block.header.number = ethUtil.toBuffer(blockNumber)
+        block.header.number = vapUtil.toBuffer(blockNumber)
         block.header.difficulty = '0xfffffff'
         block.header.parentHash = blocks[blockNumber - 1].hash()
         blockchain.putBlock(block, function (err) {

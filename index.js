@@ -12,12 +12,12 @@ const Stoplight = require('flow-stoplight')
 const semaphore = require('semaphore')
 const levelup = require('levelup')
 const memdown = require('memdown')
-const Block = require('ethereumjs-block')
-const ethUtil = require('ethereumjs-util')
-const Ethash = require('ethashjs')
+const Block = require('vaporyjs-block')
+const vapUtil = require('vaporyjs-util')
+const Vapash = require('vapashjs')
 const Buffer = require('safe-buffer').Buffer
-const BN = ethUtil.BN
-const rlp = ethUtil.rlp
+const BN = vapUtil.BN
+const rlp = vapUtil.rlp
 
 module.exports = Blockchain
 
@@ -29,7 +29,7 @@ function Blockchain (opts) {
   self.blockDb = opts.blockDb ? opts.blockDb : levelup('', { db: memdown })
   self.detailsDb = opts.detailsDb ? opts.detailsDb : levelup('', { db: memdown })
   self.validate = (opts.validate === undefined ? true : opts.validate)
-  self.ethash = self.validate ? new Ethash(self.detailsDb) : null
+  self.vapash = self.validate ? new Vapash(self.detailsDb) : null
   self.meta = null
   self._initDone = false
   self._putSemaphore = semaphore(1)
@@ -194,7 +194,7 @@ Blockchain.prototype._putBlock = function (block, cb, isGenesis) {
   function verifyPOW (next) {
     if (!self.validate) return next()
 
-    self.ethash.verifyPOW(block, function (valid) {
+    self.vapash.verifyPOW(block, function (valid) {
       next(valid ? null : new Error('invalid POW'))
     })
   }
@@ -209,7 +209,7 @@ Blockchain.prototype._putBlock = function (block, cb, isGenesis) {
       if (!err && parentDetails) {
         next()
       } else {
-        let parentHash = ethUtil.bufferToHex(block.header.parentHash.toString('hex'))
+        let parentHash = vapUtil.bufferToHex(block.header.parentHash.toString('hex'))
         next(new Error(`parent hash not found: ${parentHash}`))
       }
     })
@@ -217,7 +217,7 @@ Blockchain.prototype._putBlock = function (block, cb, isGenesis) {
 
   function rebuildInfo (next) {
     // calculate the total difficulty for this block
-    var totalDifficulty = new BN(ethUtil.bufferToInt(block.header.difficulty))
+    var totalDifficulty = new BN(vapUtil.bufferToInt(block.header.difficulty))
     // add this block as a child to the parent's block details
     if (!isGenesis) {
       totalDifficulty.iadd(new BN(parentDetails.td))
@@ -228,7 +228,7 @@ Blockchain.prototype._putBlock = function (block, cb, isGenesis) {
     var blockDetails = {
       parent: block.header.parentHash.toString('hex'),
       td: totalDifficulty.toString(),
-      number: ethUtil.bufferToInt(block.header.number),
+      number: vapUtil.bufferToInt(block.header.number),
       child: null,
       staleChildren: [],
       genesis: block.isGenesis()
@@ -257,7 +257,7 @@ Blockchain.prototype._putBlock = function (block, cb, isGenesis) {
     if (block.isGenesis() || totalDifficulty.cmp(self.meta.td) === 1) {
       blockDetails.inChain = true
       self.meta.rawHead = blockHashHexString
-      self.meta.height = ethUtil.bufferToInt(block.header.number)
+      self.meta.height = vapUtil.bufferToInt(block.header.number)
       self.meta.td = totalDifficulty
 
       // blockNumber as decimal string
@@ -361,7 +361,7 @@ Blockchain.prototype.getBlocks = function (blockId, maxBlocks, skip, reverse, cb
         return cb(null, blocks)
       }
 
-      var nextBlockNumber = ethUtil.bufferToInt(block.header.number) + (reverse ? -1 : 1)
+      var nextBlockNumber = vapUtil.bufferToInt(block.header.number) + (reverse ? -1 : 1)
 
       if (i !== 0 && skip && i % (skip + 1) !== 0) {
         return nextBlock(nextBlockNumber)
