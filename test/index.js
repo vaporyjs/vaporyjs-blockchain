@@ -1,6 +1,6 @@
 const test = require('tape')
 const Blockchain = require('..')
-const Block = require('ethereumjs-block')
+const Block = require('vaporyjs-block')
 const async = require('async')
 
 test('blockchain test', function (t) {

@@ -1,5 +1,6 @@
 {
-  "name": "ethereumjs-blockchain",
+  "name": "vaporyjs-blockchain",
+  "namespace": "vaporyjs",
   "version": "1.4.1",
   "description": "A module to store and interact with blocks",
   "main": "index.js",
@@ -8,23 +9,23 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ethereumjs/ethereumjs-blockchain.git"
+    "url": "git+https://github.com/vaporyjs/vaporyjs-blockchain.git"
   },
   "keywords": [
-    "ethereum",
+    "vapory",
     "blockchain"
   ],
   "author": "mjbecze <mjbecze@gmail.com>",
   "license": "MPL-2.0",
   "bugs": {
-    "url": "https://github.com/ethereumjs/ethereumjs-blockchain/issues"
+    "url": "https://github.com/vaporyjs/vaporyjs-blockchain/issues"
   },
-  "homepage": "https://github.com/ethereumjs/ethereumjs-blockchain#readme",
+  "homepage": "https://github.com/vaporyjs/vaporyjs-blockchain#readme",
   "dependencies": {
     "async": "^1.5.0",
-    "ethashjs": "^0.0.7",
-    "ethereumjs-block": "^1.2.2",
-    "ethereumjs-util": "^4.0.1",
+    "vapashjs": "0.0.7",
+    "vaporyjs-block": "1.2.2",
+    "vaporyjs-util": "4.0.1",
     "levelup": "^1.3.0",
     "memdown": "^1.1.0",
     "semaphore": "^1.0.3"

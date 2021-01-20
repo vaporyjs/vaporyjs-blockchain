@@ -1,16 +1,16 @@
 # SYNOPSIS
-[![NPM Package](https://img.shields.io/npm/v/ethereumjs-blockchain.svg?style=flat-square)](https://www.npmjs.org/package/ethereumjs-blockchain)
-[![Build Status](https://img.shields.io/travis/ethereumjs/ethereumjs-blockchain.svg?branch=master&style=flat-square)](https://travis-ci.org/ethereumjs/ethereumjs-blockchain)
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ethereum/ethereumjs-lib?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) or #ethereumjs on freenode
+[![NPM Package](https://img.shields.io/npm/v/vaporyjs-blockchain.svg?style=flat-square)](https://www.npmjs.org/package/vaporyjs-blockchain)
+[![Build Status](https://img.shields.io/travis/vaporyjs/vaporyjs-blockchain.svg?branch=master&style=flat-square)](https://travis-ci.org/vaporyjs/vaporyjs-blockchain)
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vapory/vaporyjs-lib?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) or #vaporyjs on freenode
 
 A module to store and interact with blocks.
 
 # INSTALL
-`npm install ethereumjs-blockchain`
+`npm install vaporyjs-blockchain`
 
 # API
 
-# ethereumjs-blockchain
+# vaporyjs-blockchain
 A module to store and interact with blocks
 
 - [`Blockchain`](#blockchain)
@@ -26,7 +26,7 @@ A module to store and interact with blocks
         - [`blockchain.selectNeededHashes(hashes, cb)`](#blockchainselectneededhasheshashes-cb)
 
 ## `Blockchain`
-Implements functions for retrieving, manipulating and storing Ethereum's blockchain
+Implements functions for retrieving, manipulating and storing Vapory's blockchain
 
 ### `new Blockchain(blockDB, detailsDB)`
 Creates new Blockchain object 

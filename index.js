@@ -9,11 +9,11 @@ const async = require('async')
 const semaphore = require('semaphore')
 const levelup = require('levelup')
 const memdown = require('memdown')
-const Block = require('ethereumjs-block')
-const ethUtil = require('ethereumjs-util')
-const Ethash = require('ethashjs')
-const BN = ethUtil.BN
-const rlp = ethUtil.rlp
+const Block = require('vaporyjs-block')
+const vapUtil = require('vaporyjs-util')
+const Vapash = require('vapashjs')
+const BN = vapUtil.BN
+const rlp = vapUtil.rlp
 
 var Blockchain = module.exports = function (db, validate) {
   if (!db) {
@@ -22,7 +22,7 @@ var Blockchain = module.exports = function (db, validate) {
     })
   }
   this.db = db
-  this.ethash = new Ethash(db)
+  this.vapash = new Vapash(db)
   this.validate = validate === undefined ? true : validate
   this._initDone = false
   this._pendingOps = []
@@ -158,7 +158,7 @@ Blockchain.prototype._putBlock = function (block, cb, _genesis) {
         return cb2()
       }
 
-      self.ethash.verifyPOW(block, function (valid) {
+      self.vapash.verifyPOW(block, function (valid) {
         if (valid) {
           cb2()
         } else {
@@ -184,7 +184,7 @@ Blockchain.prototype._putBlock = function (block, cb, _genesis) {
     },
     function rebuildInfo (cb2) {
       // calculate the total difficulty for this block
-      var td = new BN(ethUtil.bufferToInt(block.header.difficulty))
+      var td = new BN(vapUtil.bufferToInt(block.header.difficulty))
       // add this block as a child to the parent's block details
       if (!block.isGenesis()) {
         td.iadd(new BN(parentDetails.td))
@@ -195,7 +195,7 @@ Blockchain.prototype._putBlock = function (block, cb, _genesis) {
       var blockDetails = {
         parent: block.header.parentHash.toString('hex'),
         td: td.toString(),
-        number: ethUtil.bufferToInt(block.header.number),
+        number: vapUtil.bufferToInt(block.header.number),
         child: null,
         staleChildren: [],
         genesis: block.isGenesis()
@@ -218,7 +218,7 @@ Blockchain.prototype._putBlock = function (block, cb, _genesis) {
       if (td.cmp(self.meta.td) === 1 || block.isGenesis()) {
         blockDetails.inChain = true
         self.meta.rawHead = blockHash
-        self.meta.height = ethUtil.bufferToInt(block.header.number)
+        self.meta.height = vapUtil.bufferToInt(block.header.number)
         self.meta.td = td
 
         const key = parseInt(block.header.number.toString('hex'), 16).toString()
@@ -271,7 +271,7 @@ Blockchain.prototype.getBlock = function (hash, cb) {
   var block
 
   if (!Number.isInteger(hash)) {
-    hash = ethUtil.toBuffer(hash).toString('hex')
+    hash = vapUtil.toBuffer(hash).toString('hex')
   }
 
   this.db.get(hash, {
